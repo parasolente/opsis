@@ -1,0 +1,238 @@
+/* =====================================================
+   MEJORAS PARA EL BOTÓN DEL MENÚ MÓVIL - ÓpsisAI
+   Estilos modernos y atractivos con animaciones suaves
+   ===================================================== 
+   
+   INSTRUCCIONES DE USO:
+   1. Agrega este archivo CSS después de style.css en tu HTML:
+      <link rel="stylesheet" href="mobile-menu-styles.css">
+   
+   2. O copia estos estilos dentro de una etiqueta <style> en el <head>
+*/
+
+/* ==================== ESTILOS BASE ==================== */
+
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 12px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: visible;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Efecto hover - Elevación y color */
+.mobile-menu-toggle:hover {
+    background: linear-gradient(135deg, #F5F5F5 0%, #EEEEEE 100%);
+    border-color: #1B5E20;
+    box-shadow: 0 4px 12px rgba(27, 94, 32, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Efecto active - Press down */
+.mobile-menu-toggle:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ==================== LÍNEAS DEL HAMBURGUESA ==================== */
+
+.mobile-menu-toggle span {
+    width: 24px;
+    height: 3px;
+    background: linear-gradient(90deg, #1B5E20 0%, #2E7D32 100%);
+    border-radius: 999px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: block;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== ESTADO ACTIVO (X) ==================== */
+
+.mobile-menu-toggle.active {
+    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+    border-color: #1B5E20;
+    box-shadow: 0 6px 20px rgba(27, 94, 32, 0.35), 0 0 0 0 rgba(27, 94, 32, 0.4);
+    animation: pulse-shadow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.mobile-menu-toggle.active span {
+    background: #FFFFFF;
+    box-shadow: none;
+}
+
+/* Transformación línea 1 */
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+/* Transformación línea 2 (desaparece) */
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-30px) scale(0);
+}
+
+/* Transformación línea 3 */
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
+/* ==================== ANIMACIONES ==================== */
+
+@keyframes pulse-shadow {
+    0%, 100% {
+        box-shadow: 0 6px 20px rgba(27, 94, 32, 0.35), 0 0 0 0 rgba(27, 94, 32, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(27, 94, 32, 0.35), 0 0 0 12px rgba(27, 94, 32, 0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ==================== TOOLTIP (opcional) ==================== */
+
+.mobile-menu-toggle::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background: #212121;
+    color: #FFFFFF;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-menu-toggle::before {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #212121;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+}
+
+.mobile-menu-toggle:hover::after,
+.mobile-menu-toggle:hover::before {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+}
+
+.mobile-menu-toggle.active:hover::after,
+.mobile-menu-toggle.active:hover::before {
+    opacity: 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 380px) {
+    .mobile-menu-toggle {
+        width: 44px;
+        height: 44px;
+        padding: 10px;
+    }
+    
+    .mobile-menu-toggle span {
+        width: 22px;
+        height: 2.5px;
+    }
+}
+
+/* ==================== VARIANTES OPCIONALES ==================== */
+
+/* Variante 1: Botón con gradiente completo */
+.mobile-menu-toggle.gradient-full {
+    background: linear-gradient(135deg, #1B5E20 0%, #4CAF50 100%);
+    border: none;
+}
+
+.mobile-menu-toggle.gradient-full span {
+    background: #FFFFFF;
+}
+
+.mobile-menu-toggle.gradient-full:hover {
+    background: linear-gradient(135deg, #0D3D13 0%, #1B5E20 100%);
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* Variante 2: Botón minimalista */
+.mobile-menu-toggle.minimal {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.mobile-menu-toggle.minimal:hover {
+    background: rgba(27, 94, 32, 0.08);
+}
+
+/* Variante 3: Botón con animación de rotación */
+.mobile-menu-toggle.rotate-style:hover {
+    transform: translateY(-2px) rotate(90deg);
+}
+
+.mobile-menu-toggle.rotate-style.active {
+    transform: rotate(180deg);
+}
+
+/* ==================== ACCESIBILIDAD ==================== */
+
+/* Focus visible para navegación por teclado */
+.mobile-menu-toggle:focus-visible {
+    outline: 3px solid #1B5E20;
+    outline-offset: 2px;
+}
+
+/* Reducir animaciones si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+    .mobile-menu-toggle,
+    .mobile-menu-toggle span,
+    .mobile-menu-toggle::after,
+    .mobile-menu-toggle::before {
+        transition: none;
+        animation: none;
+    }
+}

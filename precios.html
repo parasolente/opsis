@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Planes y precios de ÓpsisAI: desde acceso móvil hasta soluciones personalizadas con estaciones de trabajo adaptativas para tu vivero.">
+    <title>Planes y Precios - ÓpsisAI</title>
+    <link rel="icon" type="image/png" href="/home/angel/Descargas/logon.png">
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Pricing Page Specific Styles */
+        .pricing-hero {
+            padding: var(--space-24) var(--space-8) var(--space-16);
+            background: linear-gradient(180deg, var(--color-gray-50) 0%, var(--color-white) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-hero::before {
+            content: '';
+            position: absolute;
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(76, 175, 80, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .pricing-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.1) 0%, rgba(102, 187, 106, 0.1) 100%);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: var(--font-weight-medium);
+            color: var(--color-primary);
+            margin-bottom: var(--space-6);
+        }
+
+        .pricing-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: var(--font-weight-extrabold);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-6);
+        }
+
+        .pricing-subtitle {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--color-gray-600);
+            max-width: 600px;
+            margin: 0 auto var(--space-12);
+        }
+
+        .pricing-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-8);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-8);
+            margin-bottom: var(--space-16);
+        }
+
+        .pricing-card {
+            background: var(--color-white);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-10);
+            transition: all var(--transition-base);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--color-primary);
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.02) 0%, rgba(102, 187, 106, 0.02) 100%);
+            border-color: var(--color-primary);
+            border-width: 3px;
+        }
+
+        .pricing-card.featured::before {
+            content: 'Más Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            color: var(--color-white);
+            padding: var(--space-2) var(--space-6);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: var(--font-weight-semibold);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .pricing-card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(102, 187, 106, 0.1) 100%);
+            border-radius: var(--radius-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .pricing-card-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--color-primary);
+        }
+
+        .pricing-card-name {
+            font-size: 1.75rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-3);
+        }
+
+        .pricing-card-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--color-gray-600);
+            margin-bottom: var(--space-6);
+        }
+
+        .pricing-card-price {
+            margin-bottom: var(--space-8);
+        }
+
+        .pricing-amount {
+            font-size: 3rem;
+            font-weight: var(--font-weight-extrabold);
+            color: var(--color-gray-900);
+            line-height: 1;
+        }
+
+        .pricing-note {
+            font-size: 0.9375rem;
+            color: var(--color-gray-500);
+            margin-top: var(--space-2);
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 var(--space-8);
+            flex-grow: 1;
+        }
+
+        .pricing-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--color-gray-700);
+        }
+
+        .pricing-feature svg {
+            width: 20px;
+            height: 20px;
+            color: var(--color-primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .pricing-cta {
+            width: 100%;
+        }
+
+        .pricing-contact-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            font-size: 0.875rem;
+            color: var(--color-gray-600);
+            margin-bottom: var(--space-4);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .pricing-contact-note svg {
+            width: 16px;
+            height: 16px;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .pricing-faq {
+            max-width: 900px;
+            margin: var(--space-24) auto 0;
+            padding: 0 var(--space-8);
+        }
+
+        .faq-title {
+            font-size: 2.5rem;
+            font-weight: var(--font-weight-bold);
+            text-align: center;
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-12);
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+        }
+
+        .faq-item {
+            background: var(--color-white);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            transition: all var(--transition-base);
+        }
+
+        .faq-item:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .faq-question {
+            font-size: 1.125rem;
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-3);
+        }
+
+        .faq-answer {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--color-gray-600);
+            margin: 0;
+        }
+
+        .pricing-contact-banner {
+            max-width: 1200px;
+            margin: var(--space-24) auto;
+            padding: var(--space-16) var(--space-8);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            border-radius: var(--radius-3xl);
+            text-align: center;
+            color: var(--color-white);
+        }
+
+        .contact-banner-title {
+            font-size: 2.5rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-4);
+        }
+
+        .contact-banner-text {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-8);
+            opacity: 0.95;
+        }
+
+        .contact-banner-buttons {
+            display: flex;
+            gap: var(--space-4);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-white {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-8);
+            background: var(--color-white);
+            color: var(--color-primary);
+            font-size: 1rem;
+            font-weight: var(--font-weight-semibold);
+            border-radius: var(--radius-xl);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .btn-white-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-8);
+            background: transparent;
+            color: var(--color-white);
+            font-size: 1rem;
+            font-weight: var(--font-weight-semibold);
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--color-white);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+        }
+
+        .btn-white-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing-hero {
+                padding: var(--space-16) var(--space-6) var(--space-12);
+            }
+
+            .pricing-title {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+
+            .pricing-subtitle {
+                font-size: 1rem;
+                margin-bottom: var(--space-8);
+            }
+
+            .pricing-container {
+                padding: var(--space-12) var(--space-4);
+            }
+
+            .pricing-grid {
+                gap: var(--space-6);
+                max-width: 100%;
+            }
+
+            .pricing-card {
+                padding: var(--space-6);
+            }
+
+            .pricing-card.featured::before {
+                font-size: 0.8125rem;
+                padding: var(--space-1) var(--space-4);
+            }
+
+            .pricing-card-icon {
+                width: 48px;
+                height: 48px;
+                margin-bottom: var(--space-4);
+            }
+
+            .pricing-card-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .pricing-card-name {
+                font-size: 1.5rem;
+                margin-bottom: var(--space-2);
+            }
+
+            .pricing-card-description {
+                font-size: 0.9375rem;
+                margin-bottom: var(--space-5);
+            }
+
+            .pricing-amount {
+                font-size: 2.5rem;
+            }
+
+            .pricing-note {
+                font-size: 0.875rem;
+            }
+
+            .pricing-feature {
+                padding: var(--space-2) 0;
+                font-size: 0.9375rem;
+            }
+
+            .pricing-feature svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .pricing-faq {
+                padding: 0 var(--space-4);
+                margin-top: var(--space-16);
+            }
+
+            .faq-title {
+                font-size: 1.75rem;
+                margin-bottom: var(--space-8);
+            }
+
+            .faq-item {
+                padding: var(--space-6);
+            }
+
+            .faq-question {
+                font-size: 1rem;
+            }
+
+            .faq-answer {
+                font-size: 0.9375rem;
+            }
+
+            .pricing-contact-banner {
+                margin: var(--space-16) var(--space-4);
+                padding: var(--space-12) var(--space-6);
+            }
+
+            .contact-banner-title {
+                font-size: 1.75rem;
+                margin-bottom: var(--space-3);
+            }
+
+            .contact-banner-text {
+                font-size: 1rem;
+                margin-bottom: var(--space-6);
+            }
+
+            .contact-banner-buttons {
+                flex-direction: column;
+            }
+
+            .btn-white,
+            .btn-white-outline {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pricing-hero {
+                padding: var(--space-12) var(--space-4) var(--space-8);
+            }
+
+            .pricing-badge {
+                font-size: 0.8125rem;
+                padding: var(--space-1) var(--space-3);
+                margin-bottom: var(--space-4);
+            }
+
+            .pricing-title {
+                font-size: 1.75rem;
+            }
+
+            .pricing-subtitle {
+                font-size: 0.9375rem;
+            }
+
+            .pricing-container {
+                padding: var(--space-8) var(--space-3);
+            }
+
+            .pricing-card {
+                padding: var(--space-5);
+            }
+
+            .pricing-card-name {
+                font-size: 1.375rem;
+            }
+
+            .pricing-amount {
+                font-size: 2rem;
+            }
+
+            .pricing-contact-banner {
+                margin: var(--space-12) var(--space-3);
+                padding: var(--space-8) var(--space-5);
+            }
+
+            .contact-banner-title {
+                font-size: 1.5rem;
+            }
+
+            .contact-banner-text {
+                font-size: 0.9375rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span class="announcement-badge">Planes</span>
+            <span>Encuentra la solución perfecta para tu vivero</span>
+            <a href="index.html" class="announcement-link">
+                Inicio
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <img src="static/images/logo.png" alt="Logo de ÓpsisAI" width="32" height="32">
+                    </div>
+                    <span class="logo-text">ÓpsisAI</span>
+                </a>
+                <nav class="nav-menu" id="nav-menu">
+                    <a href="index.html#solucion" class="nav-link">Solución</a>
+                    <a href="index.html#tecnologia" class="nav-link">Tecnología</a>
+                    <a href="precios.html" class="nav-link">Precios</a>
+                    <a href="index.html#nosotros" class="nav-link">Nosotros</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <a href="demo.html" class="btn-secondary">Ver Demo</a>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pricing-hero">
+        <div class="pricing-hero-content">
+            <div class="pricing-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Planes y Precios
+            </div>
+            <h1 class="pricing-title">La solución perfecta para <span class="gradient-text">tu operación</span></h1>
+            <p class="pricing-subtitle">Desde acceso móvil hasta soluciones empresariales personalizadas. Elige el plan que se adapte a las necesidades de tu vivero.</p>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <div class="pricing-container">
+        <div class="pricing-grid">
+
+            <!-- Card 1: Mobile Access -->
+            <div class="pricing-card">
+                <div class="pricing-card-header">
+                    <div class="pricing-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <h3 class="pricing-card-name">ÓpsisAI Móvil</h3>
+                    <p class="pricing-card-description">Lleva el poder de la inteligencia artificial en tu dispositivo. Conteo instantáneo al alcance de tu mano.</p>
+                </div>
+
+                <div class="pricing-card-price">
+                    <div class="pricing-amount">Contacto</div>
+                    <p class="pricing-note">Precios según volumen de uso</p>
+                </div>
+
+                <ul class="pricing-features">
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Usa tu smartphone o tablet</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Detección instantánea con 95% de confianza</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Resultados en menos de 1 segundo</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Reportes básicos y exportación de datos</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Soporte técnico por correo</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Ideal para viveros pequeños y medianos</span>
+                    </li>
+                </ul>
+
+                <div class="pricing-contact-note">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>Requiere contacto para habilitar</span>
+                </div>
+                <a href="tel:+524924590668" class="btn-outline pricing-cta">Contactar Ventas</a>
+            </div>
+
+            <!-- Card 2: Workstation (Featured) -->
+            <div class="pricing-card featured">
+                <div class="pricing-card-header">
+                    <div class="pricing-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h3 class="pricing-card-name">Estación de Trabajo</h3>
+                    <p class="pricing-card-description">¿Quieres avanzar de nivel? Sistema integrado en tu invernadero para operaciones a gran escala sin dependencia de conteos manuales.</p>
+                </div>
+
+                <div class="pricing-card-price">
+                    <div class="pricing-amount">Cotización</div>
+                    <p class="pricing-note">Tras evaluación de tu invernadero</p>
+                </div>
+
+                <ul class="pricing-features">
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span><strong>Todo lo de ÓpsisAI Móvil, más:</strong></span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Estación de trabajo adaptativa para cualquier invernadero</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Hardware especializado optimizado para tu operación</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Sistema a largo plazo sin conteos manuales</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Integración con sistemas de gestión existentes</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Reportes avanzados y analytics en tiempo real</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Soporte técnico prioritario y capacitación</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Actualizaciones de software incluidas</span>
+                    </li>
+                </ul>
+
+                <div class="pricing-contact-note">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>Requiere contacto para habilitar</span>
+                </div>
+                <a href="#contacto" class="btn-primary pricing-cta">
+                    <span>Solicitar Evaluación</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Card 3: Custom Enterprise -->
+            <div class="pricing-card">
+                <div class="pricing-card-header">
+                    <div class="pricing-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z"></path>
+                            <path d="M2 17L12 22L22 17"></path>
+                            <path d="M2 12L12 17L22 12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="pricing-card-name">Solución Personalizada</h3>
+                    <p class="pricing-card-description">El sistema más avanzado. Modelo de IA reentrenado específicamente para tu cultivo y operación única.</p>
+                </div>
+
+                <div class="pricing-card-price">
+                    <div class="pricing-amount">Empresarial</div>
+                    <p class="pricing-note">Solución completamente personalizada</p>
+                </div>
+
+                <ul class="pricing-features">
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span><strong>Todo lo de Estación de Trabajo, más:</strong></span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Reentrenamiento del modelo específico para tu cultivo</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Optimización para especies o variedades específicas</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Sistema 100% personalizado a tu medida</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Múltiples estaciones de trabajo sincronizadas</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Dashboard empresarial con BI avanzado</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>API para integración con sistemas ERP/CRM</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Soporte dedicado 24/7 con SLA garantizado</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Mejora continua del modelo con tus datos</span>
+                    </li>
+                </ul>
+
+                <div class="pricing-contact-note">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>Requiere contacto para habilitar</span>
+                </div>
+                <a href="#contacto" class="btn-outline pricing-cta">Agendar Consultoría</a>
+            </div>
+
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="pricing-faq">
+            <h2 class="faq-title">Preguntas Frecuentes</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3 class="faq-question">¿Cómo funciona el proceso de evaluación?</h3>
+                    <p class="faq-answer">Nuestro equipo técnico visita tu invernadero para evaluar dimensiones, flujo de trabajo, tipos de charolas y necesidades específicas. Basándonos en esto, diseñamos una solución adaptada a tu operación.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">¿Cuánto tiempo toma la implementación?</h3>
+                    <p class="faq-answer">Para ÓpsisAI Móvil, el acceso es inmediato tras el contacto inicial. Las Estaciones de Trabajo toman 2-4 semanas desde la evaluación. Las Soluciones Personalizadas requieren 6-8 semanas para reentrenamiento e instalación.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">¿Qué tipo de soporte incluye cada plan?</h3>
+                    <p class="faq-answer">El plan Móvil incluye soporte por correo en horario laboral. Estación de Trabajo añade soporte prioritario y capacitación. Solución Personalizada incluye soporte dedicado 24/7 con SLA garantizado.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">¿Puedo actualizar mi plan en el futuro?</h3>
+                    <p class="faq-answer">Absolutamente. Muchos clientes comienzan con ÓpsisAI Móvil y escalan a Estaciones de Trabajo o Soluciones Personalizadas conforme crece su operación. Contáctanos para conocer el proceso de migración.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">¿Qué especies o cultivos soporta ÓpsisAI?</h3>
+                    <p class="faq-answer">El modelo base detecta plántulas germinadas de forma genérica. La Solución Personalizada permite reentrenar el modelo para especies o variedades específicas de hortalizas, optimizando la detección para tus cultivos exactos.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Banner -->
+        <div class="pricing-contact-banner" id="contacto">
+            <h2 class="contact-banner-title">¿Listo para transformar tu vivero?</h2>
+            <p class="contact-banner-text">Agenda una demostración en vivo y descubre cómo ÓpsisAI puede optimizar tu operación desde el primer día.</p>
+            <div class="contact-banner-buttons">
+                <a href="demo.html" class="btn-white">
+                    <span>Ver Demo en Vivo</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </a>
+                <a href="tel:+524924590668" class="btn-white-outline">Contactar Ventas</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <img src="static/images/logon.png" alt="Logo de ÓpsisAI" width="32" height="32">
+                        </div>
+                        <span class="logo-text">ÓpsisAI</span>
+                    </a>
+                    <p class="footer-tagline">Transformando la agricultura con inteligencia artificial</p>
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span>Todos los sistemas operacionales</span>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <div class="link-column">
+                        <h4>Solución</h4>
+                        <a href="index.html">Visión General</a>
+                        <a href="index.html#solucion">Detección de Plántulas</a>
+                        <a href="#">Reportes y Analytics</a>
+                        <a href="#">Integraciones</a>
+                    </div>
+                    <div class="link-column">
+                        <h4>Recursos</h4>
+                        <a href="#">Documentación</a>
+                        <a href="#">Casos de Estudio</a>
+                        <a href="reduccion-de-tiempo.html">Blog</a>
+                        <a href="#">Centro de Ayuda</a>
+                    </div>
+                    <div class="link-column">
+                        <h4>Compañía</h4>
+                        <a href="#">Nosotros</a>
+                        <a href="#">Contacto</a>
+                        <a href="#">Carreras</a>
+                        <a href="#">Partners</a>
+                    </div>
+                    <div class="link-column">
+                        <h4>Legal</h4>
+                        <a href="#">Privacidad</a>
+                        <a href="#">Términos de Uso</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">Licencias</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 ÓpsisAI. Todos los derechos reservados.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Twitter">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M15.751 3h2.824l-6.173 7.056L19.5 17h-5.687l-4.455-5.825L4.067 17H1.24l6.604-7.547L1.5 3h5.833l4.026 5.325L15.751 3z" fill="currentColor"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M17 2H3c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zM7 15H5V8h2v7zM6 7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm9 8h-2v-3.5c0-1.93-2.5-1.78-2.5 0V15h-2V8h2v1.15c.88-1.63 4.5-1.75 4.5 1.56V15z" fill="currentColor"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="GitHub">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.165 20 14.418 20 10c0-5.523-4.477-10-10-10z" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        // === Mobile Menu Toggle ===
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        if (mobileMenuToggle && navMenu) {
+            mobileMenuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileMenuToggle.classList.toggle('active');
+            });
+
+            // Close menu when clicking on links
+            const navLinks = navMenu.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.navbar')) {
+                    navMenu.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                }
+            });
+        }
+
+        // === Smooth Scroll for Anchor Links ===
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

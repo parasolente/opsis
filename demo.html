@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ÓpsisAI - Demo en vivo. Prueba la detección de plántulas en tiempo real.">
+    <title>Demo en vivo - ÓpsisAI</title>
+    <link rel="icon" type="image/png" href="static/images/logon.png">
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+        /* Estilos adicionales para asegurar que el menú móvil funcione */
+        @media (max-width: 768px) {
+            .announcement-bar {
+                display: none !important;
+            }
+
+            .navbar {
+                z-index: 1000 !important;
+            }
+
+            .navbar-container {
+                position: relative !important;
+            }
+
+            .nav-menu {
+                position: absolute !important;
+                top: 100% !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                z-index: 999 !important;
+            }
+        }
+
+        /* Estilos responsive mejorados para la demo */
+        @media (max-width: 1024px) {
+            .demo-grid {
+                grid-template-columns: 1fr !important;
+                gap: var(--space-8) !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: var(--space-12) var(--space-4) !important;
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr !important;
+                gap: var(--space-6) !important;
+            }
+
+            .demo-window {
+                border-radius: var(--radius-lg) !important;
+            }
+
+            .demo-window-header {
+                padding: var(--space-4) !important;
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: var(--space-3);
+            }
+
+            .window-controls {
+                order: 2;
+            }
+
+            .window-title {
+                order: 1;
+                font-size: 0.9375rem;
+            }
+
+            .window-status {
+                order: 3;
+                font-size: 0.8125rem;
+            }
+
+            .demo-content {
+                min-height: 280px !important;
+            }
+
+            #video {
+                min-height: 280px !important;
+            }
+
+            .results-section {
+                padding: var(--space-6) !important;
+            }
+
+            .results-cards {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: var(--space-4) !important;
+            }
+
+            .result-card {
+                padding: var(--space-4) !important;
+            }
+
+            .result-value {
+                font-size: 2rem !important;
+            }
+
+            .result-label {
+                font-size: 0.8125rem !important;
+            }
+
+            .progress-section {
+                padding: var(--space-4) !important;
+                gap: var(--space-3) !important;
+            }
+
+            .progress-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: var(--space-2);
+            }
+
+            .progress-value {
+                font-size: 1.5rem !important;
+            }
+
+            .progress-status {
+                font-size: 0.8125rem !important;
+            }
+
+            .image-result {
+                padding: var(--space-6) !important;
+            }
+
+            #resultado-imagen {
+                max-height: 300px !important;
+            }
+
+            .hero-title {
+                font-size: 1.75rem !important;
+                line-height: 1.2 !important;
+            }
+
+            .hero-description {
+                font-size: 0.9375rem !important;
+            }
+
+            .hero-badge {
+                font-size: 0.75rem !important;
+                padding: var(--space-2) var(--space-4) !important;
+            }
+
+            #snap {
+                padding: var(--space-4) var(--space-6) !important;
+                font-size: 0.875rem !important;
+            }
+
+            #status-message {
+                padding: var(--space-3) var(--space-4) !important;
+                font-size: 0.8125rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: var(--space-8) var(--space-3) !important;
+            }
+
+            .hero-title {
+                font-size: 1.5rem !important;
+            }
+
+            .hero-description {
+                font-size: 0.875rem !important;
+            }
+
+            .demo-window-header {
+                padding: var(--space-3) !important;
+            }
+
+            .window-title {
+                font-size: 0.875rem;
+            }
+
+            .demo-content {
+                min-height: 240px !important;
+            }
+
+            #video {
+                min-height: 240px !important;
+            }
+
+            .results-section {
+                padding: var(--space-4) !important;
+            }
+
+            .result-value {
+                font-size: 1.75rem !important;
+            }
+
+            .result-label {
+                font-size: 0.75rem !important;
+            }
+
+            .progress-value {
+                font-size: 1.25rem !important;
+            }
+
+            #snap {
+                padding: var(--space-3) var(--space-5) !important;
+                font-size: 0.8125rem !important;
+            }
+
+            #snap svg {
+                width: 18px !important;
+                height: 18px !important;
+            }
+        }
+
+        /* Fix para elementos inline */
+        .demo-grid {
+            display: grid;
+        }
+
+        .results-section {
+            background: var(--color-white);
+        }
+
+        .results-cards {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
+
+        .result-card {
+            flex: 1;
+            min-width: 0;
+        }
+
+        @media (max-width: 768px) {
+            .results-cards {
+                flex-direction: column;
+                flex-wrap: nowrap;
+            }
+
+            .result-card {
+                width: 100%;
+            }
+        }
+
+        /* Modal de Licencia */
+        .license-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .license-modal.active {
+            display: flex;
+        }
+
+        .license-modal-content {
+            background: var(--color-white);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-10);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-2xl);
+            animation: slideUp 0.4s ease;
+        }
+
+        .license-modal-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .license-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(102, 187, 106, 0.1) 100%);
+            border-radius: var(--radius-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-4);
+        }
+
+        .license-icon svg {
+            width: 32px;
+            height: 32px;
+            color: var(--color-primary);
+        }
+
+        .license-modal-title {
+            font-size: 1.75rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .license-modal-subtitle {
+            font-size: 1rem;
+            color: var(--color-gray-600);
+            line-height: 1.6;
+        }
+
+        .license-input-group {
+            margin-bottom: var(--space-6);
+        }
+
+        .license-input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-700);
+            margin-bottom: var(--space-2);
+        }
+
+        .license-input {
+            width: 100%;
+            padding: var(--space-4);
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            text-align: center;
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-xl);
+            transition: all var(--transition-base);
+            text-transform: uppercase;
+        }
+
+        .license-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
+        }
+
+        .license-input.error {
+            border-color: #F44336;
+            background: rgba(244, 67, 54, 0.05);
+        }
+
+        .license-error-message {
+            display: none;
+            margin-top: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            background: rgba(244, 67, 54, 0.1);
+            border-left: 3px solid #F44336;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            color: #D32F2F;
+        }
+
+        .license-error-message.show {
+            display: block;
+        }
+
+        .license-submit-btn {
+            width: 100%;
+            padding: var(--space-4);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            color: var(--color-white);
+            font-size: 1rem;
+            font-weight: var(--font-weight-semibold);
+            border: none;
+            border-radius: var(--radius-xl);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            margin-bottom: var(--space-4);
+        }
+
+        .license-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .license-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .license-info-box {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, rgba(100, 181, 246, 0.05) 100%);
+            border: 1px solid rgba(33, 150, 243, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            margin-top: var(--space-6);
+        }
+
+        .license-info-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 0.9375rem;
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-800);
+            margin-bottom: var(--space-3);
+        }
+
+        .license-info-title svg {
+            width: 18px;
+            height: 18px;
+            color: #2196F3;
+        }
+
+        .license-info-text {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--color-gray-600);
+            margin-bottom: var(--space-4);
+        }
+
+        .license-contact-btn {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-white);
+            color: var(--color-primary);
+            font-size: 0.9375rem;
+            font-weight: var(--font-weight-semibold);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .license-contact-btn:hover {
+            background: var(--color-primary);
+            color: var(--color-white);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .license-modal-content {
+                padding: var(--space-8);
+                max-width: 95%;
+            }
+
+            .license-modal-title {
+                font-size: 1.5rem;
+            }
+
+            .license-icon {
+                width: 56px;
+                height: 56px;
+            }
+
+            .license-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span class="announcement-badge">Demo en vivo</span>
+            <span>Potenciado por YOLO11: IA de vanguardia</span>
+            <a href="tecnologia-yolo.html" class="announcement-link" style="margin-right: var(--space-4);">
+                Conocer tecnología
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <a href="index.html" class="announcement-link">
+                Inicio
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <img src="static/images/logo.png" alt="Logo de ÓpsisAI" width="32" height="32">
+                    </div>
+                    <span class="logo-text">ÓpsisAI</span>
+                </a>
+                <nav class="nav-menu" id="nav-menu">
+                    <a href="index.html#solucion" class="nav-link">Solución</a>
+                    <a href="index.html#tecnologia" class="nav-link">Tecnología</a>
+                    <a href="precios.html" class="nav-link">Precios</a>
+                    <a href="index.html#nosotros" class="nav-link">Nosotros</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <a href="tel:+524924590668" class="btn-secondary">Contactar ventas</a>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="background: linear-gradient(180deg, var(--color-gray-50) 0%, var(--color-white) 100%); min-height: 100vh; padding: var(--space-24) var(--space-8); position: relative; overflow: hidden;">
+        
+        <!-- Background Elements -->
+        <div class="hero-background" style="opacity: 0.5;">
+            <div class="gradient-orb orb-1" style="top: -300px; left: -300px;"></div>
+            <div class="gradient-orb orb-2" style="bottom: -200px; right: -250px; animation-delay: -2s;"></div>
+        </div>
+
+        <div style="max-width: 1440px; margin: 0 auto; position: relative;">
+            
+            <!-- Header -->
+            <div style="text-align: center; margin-bottom: var(--space-20); animation: fadeInUp 0.8s ease-out;">
+                <div class="hero-badge" style="margin: 0 auto var(--space-6); width: fit-content;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 2L9.5 6H13.5L10.25 8.5L11.75 12.5L8 9.75L4.25 12.5L5.75 8.5L2.5 6H6.5L8 2Z" fill="currentColor"/>
+                    </svg>
+                    <span>Tecnología de IA en tiempo real</span>
+                </div>
+                <h1 class="hero-title" style="margin-bottom: var(--space-6);">
+                    Prueba <span class="gradient-text">ÓpsisAI</span> en vivo
+                </h1>
+                <p class="hero-description" style="max-width: 700px; margin-left: auto; margin-right: auto; margin-bottom: 0;">
+                    Apunta tu cámara a la charola. Observa cómo nuestro sistema de IA detecta y cuenta cada plántula con precisión instantánea. <strong>Análisis en menos de 2 segundos.</strong>
+                </p>
+            </div>
+
+            <!-- Demo Grid -->
+            <div class="demo-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-12); align-items: start; margin-bottom: var(--space-16);">
+
+                <!-- Camera Window -->
+                <div class="demo-window" style="animation: fadeInUp 0.8s ease-out 0.05s backwards;">
+                    <div class="demo-window-header">
+                        <div class="window-controls">
+                            <span class="control-dot"></span>
+                            <span class="control-dot"></span>
+                            <span class="control-dot"></span>
+                        </div>
+                        <div class="window-title">Captura en vivo</div>
+                        <div class="window-status">
+                            <span class="status-indicator"></span>
+                            <span>Conectado</span>
+                        </div>
+                    </div>
+                    <div class="demo-content">
+                        <video id="video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; background: #000;"></video>
+                    </div>
+                    <div style="padding: var(--space-6); background: var(--color-gray-50); border-top: 1px solid var(--color-gray-200);">
+                        <button id="snap" class="btn-primary" style="width: 100%; justify-content: center; gap: var(--space-3); min-height: 48px; font-size: 0.9375rem;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            <span>Tomar foto y analizar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Window -->
+                <div class="demo-window" style="animation: fadeInUp 0.8s ease-out 0.1s backwards;">
+                    <div class="demo-window-header">
+                        <div style="display: flex; align-items: center; gap: var(--space-2);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline>
+                            </svg>
+                            <div class="window-title">Resultados</div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-section" style="padding: var(--space-8); background: var(--color-white);">
+                        <!-- Status Badge -->
+                        <div id="status-message" style="padding: var(--space-4) var(--space-5); background: linear-gradient(135deg, rgba(27, 94, 32, 0.08) 0%, rgba(102, 187, 106, 0.08) 100%); border-left: 3px solid var(--color-primary); border-radius: var(--radius-md); margin-bottom: var(--space-6); font-size: 0.875rem; color: var(--color-gray-700); font-weight: 500;">
+                            <span style="display: flex; align-items: center; gap: var(--space-2);">
+                                <span style="display: inline-flex; width: 6px; height: 6px; background: var(--color-success); border-radius: 50%;"></span>
+                                Cámara lista. Presiona el botón para analizar.
+                            </span>
+                        </div>
+
+                        <!-- Results Cards -->
+                        <div class="results-cards" style="display: flex; flex-direction: row; gap: var(--space-4); margin-bottom: var(--space-6);">
+                            <!-- Plántulas -->
+                            <div class="result-card" style="flex: 1; padding: var(--space-5); background: linear-gradient(135deg, rgba(27, 94, 32, 0.05) 0%, rgba(76, 175, 80, 0.05) 100%); border: 1px solid rgba(27, 94, 32, 0.1); border-radius: var(--radius-lg);">
+                                <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                                    </svg>
+                                    <span class="result-label" style="font-size: 0.875rem; color: var(--color-gray-600); font-weight: 500;">Plántulas</span>
+                                </div>
+                                <div class="result-value" id="count-plantulas" style="font-size: 2.5rem; font-weight: 700; color: var(--color-primary); line-height: 1;">0</div>
+                            </div>
+
+                            <!-- Celdas vacías -->
+                            <div class="result-card" style="flex: 1; padding: var(--space-5); background: linear-gradient(135deg, rgba(158, 158, 158, 0.05) 0%, rgba(224, 224, 224, 0.05) 100%); border: 1px solid rgba(158, 158, 158, 0.15); border-radius: var(--radius-lg);">
+                                <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    </svg>
+                                    <span class="result-label" style="font-size: 0.875rem; color: var(--color-gray-600); font-weight: 500;">Vacías</span>
+                                </div>
+                                <div class="result-value" id="count-celdas" style="font-size: 2.5rem; font-weight: 700; color: var(--color-gray-600); line-height: 1;">0</div>
+                            </div>
+
+                            <!-- Total -->
+                            <div class="result-card" style="flex: 1; padding: var(--space-5); background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, rgba(100, 181, 246, 0.05) 100%); border: 1px solid rgba(33, 150, 243, 0.15); border-radius: var(--radius-lg);">
+                                <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 3h7v7H3z"></path>
+                                        <path d="M14 3h7v7h-7z"></path>
+                                        <path d="M14 14h7v7h-7z"></path>
+                                        <path d="M3 14h7v7H3z"></path>
+                                    </svg>
+                                    <span class="result-label" style="font-size: 0.875rem; color: var(--color-gray-600); font-weight: 500;">Total</span>
+                                </div>
+                                <div class="result-value" id="count-total" style="font-size: 2.5rem; font-weight: 700; color: var(--color-info); line-height: 1;">0</div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section" style="padding: var(--space-5); background: var(--color-gray-50); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: var(--space-4);">
+                            <div class="progress-header" style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-size: 0.875rem; color: var(--color-gray-600); font-weight: 500;">Tasa de germinación</span>
+                                <span class="progress-value" id="percentage-value" style="font-size: 1.75rem; font-weight: 700; color: var(--color-primary);">0%</span>
+                            </div>
+                            <div style="width: 100%; height: 12px; background: var(--color-gray-200); border-radius: var(--radius-full); overflow: hidden;">
+                                <div id="progress-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%); border-radius: var(--radius-full); transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+                            </div>
+                            <span class="progress-status" id="percentage-status" style="font-size: 0.875rem; color: var(--color-gray-600); font-weight: 500;">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Image Result -->
+                    <div class="image-result" style="padding: var(--space-8); background: var(--color-gray-50); border-top: 1px solid var(--color-gray-200);">
+                        <h3 style="font-size: 0.9375rem; color: var(--color-gray-700); font-weight: 600; margin-bottom: var(--space-4);">Imagen procesada</h3>
+                        <div style="position: relative; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-gray-100); min-height: 200px; display: flex; align-items: center; justify-content: center;">
+                            <img id="resultado-imagen" src="" alt="Resultado del análisis" style="width: 100%; display: none; border-radius: var(--radius-lg);">
+                            <div id="no-image-message" style="text-align: center; color: var(--color-gray-400); font-size: 0.875rem; padding: var(--space-8);">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto var(--space-3); opacity: 0.5;">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <p>La imagen procesada aparecerá aquí</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal de Licencia -->
+    <div id="licenseModal" class="license-modal">
+        <div class="license-modal-content">
+            <div class="license-modal-header">
+                <div class="license-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <h2 class="license-modal-title">Ingresa tu licencia</h2>
+                <p class="license-modal-subtitle">Para usar la demo en vivo, necesitas una licencia válida de ÓpsisAI</p>
+            </div>
+
+            <form id="licenseForm">
+                <div class="license-input-group">
+                    <label class="license-input-label" for="licenseInput">Código de Licencia</label>
+                    <input
+                        type="text"
+                        id="licenseInput"
+                        class="license-input"
+                        placeholder="0000-0000-0000"
+                        maxlength="14"
+                        autocomplete="off"
+                    >
+                    <div id="licenseError" class="license-error-message">
+                        Licencia inválida. Por favor, verifica el código e intenta nuevamente.
+                    </div>
+                </div>
+
+                <button type="submit" id="licenseSubmit" class="license-submit-btn">
+                    Validar Licencia
+                </button>
+            </form>
+
+            <div class="license-info-box">
+                <div class="license-info-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    ¿No tienes licencia?
+                </div>
+                <p class="license-info-text">
+                    Contáctanos para obtener acceso a la versión móvil de ÓpsisAI y comienza a optimizar tu vivero hoy mismo.
+                </p>
+                <a href="precios.html" class="license-contact-btn">
+                    Ver Planes y Precios
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <!-- Camera & Processing Script -->
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const snapButton = document.getElementById('snap');
+        const resultadoImagen = document.getElementById('resultado-imagen');
+        const noImageMessage = document.getElementById('no-image-message');
+        const statusMessage = document.getElementById('status-message');
+
+        // Elements
+        const countPlantulas = document.getElementById('count-plantulas');
+        const countCeldas = document.getElementById('count-celdas');
+        const countTotal = document.getElementById('count-total');
+        const percentageValue = document.getElementById('percentage-value');
+        const percentageStatus = document.getElementById('percentage-status');
+        const progressBar = document.getElementById('progress-bar');
+
+        // License elements
+        const licenseModal = document.getElementById('licenseModal');
+        const licenseForm = document.getElementById('licenseForm');
+        const licenseInput = document.getElementById('licenseInput');
+        const licenseError = document.getElementById('licenseError');
+        const licenseSubmit = document.getElementById('licenseSubmit');
+
+        // Valid license
+        const VALID_LICENSE = '0020-4002-2012';
+        let isLicenseValid = false;
+
+        // Check if license exists in localStorage
+        const storedLicense = localStorage.getItem('opsisai_license');
+        if (storedLicense === VALID_LICENSE) {
+            isLicenseValid = true;
+        }
+
+        // === Start Camera ===
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment',
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    } 
+                });
+                video.srcObject = stream;
+                updateStatusMessage('Cámara conectada correctamente.', 'success');
+            } catch (err) {
+                console.error("Error accessing camera (environment): ", err);
+                updateStatusMessage('No se pudo usar la cámara trasera, intentando con la frontal...', 'error');
+                try {
+                    const stream2 = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            facingMode: 'user',
+                            width: { ideal: 1920 },
+                            height: { ideal: 1080 }
+                        } 
+                    });
+                    video.srcObject = stream2;
+                    updateStatusMessage('Cámara frontal conectada.', 'success');
+                } catch (err2) {
+                    console.error("Error accessing camera: ", err2);
+                    updateStatusMessage('No se pudo acceder a la cámara. Verifica los permisos.', 'error');
+                }
+            }
+        }
+
+        // === Adjust Canvas Size ===
+        video.onloadedmetadata = () => {
+            // No establecer dimensiones aquí, se hará al capturar
+        };
+
+        // === Update Status ===
+        function updateStatusMessage(message, type = 'info') {
+            const colors = {
+                info: 'rgba(27, 94, 32, 0.08)',
+                success: 'rgba(27, 94, 32, 0.08)',
+                error: 'rgba(244, 67, 54, 0.08)',
+                processing: 'rgba(33, 150, 243, 0.08)'
+            };
+            
+            const borderColors = {
+                info: 'var(--color-primary)',
+                success: 'var(--color-success)',
+                error: '#F44336',
+                processing: '#2196F3'
+            };
+
+            statusMessage.style.background = colors[type];
+            statusMessage.style.borderLeftColor = borderColors[type];
+            statusMessage.innerHTML = `
+                <span style="display: flex; align-items: center; gap: var(--space-2);">
+                    <span style="display: inline-flex; width: 6px; height: 6px; background: ${type === 'error' ? '#F44336' : 'var(--color-success)'}; border-radius: 50%; ${type === 'processing' ? 'animation: pulse 1s infinite;' : ''}"></span>
+                    ${message}
+                </span>
+            `;
+        }
+
+        // === License Format Helper ===
+        licenseInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 4) {
+                value = value.slice(0, 4) + '-' + value.slice(4);
+            }
+            if (value.length > 9) {
+                value = value.slice(0, 9) + '-' + value.slice(9);
+            }
+            if (value.length > 14) {
+                value = value.slice(0, 14);
+            }
+            e.target.value = value;
+        });
+
+        // === License Validation ===
+        licenseForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const enteredLicense = licenseInput.value.trim().toUpperCase();
+
+            if (enteredLicense === VALID_LICENSE) {
+                // Valid license
+                isLicenseValid = true;
+                localStorage.setItem('opsisai_license', enteredLicense);
+                licenseModal.classList.remove('active');
+                licenseInput.classList.remove('error');
+                licenseError.classList.remove('show');
+                licenseInput.value = '';
+                updateStatusMessage('Licencia validada correctamente. ¡Listo para comenzar!', 'success');
+            } else {
+                // Invalid license
+                licenseInput.classList.add('error');
+                licenseError.classList.add('show');
+                setTimeout(() => {
+                    licenseInput.classList.remove('error');
+                }, 2000);
+            }
+        });
+
+        // === Capture and Process ===
+        snapButton.addEventListener('click', async () => {
+            // Check license before processing
+            if (!isLicenseValid) {
+                licenseModal.classList.add('active');
+                return;
+            }
+
+            snapButton.disabled = true;
+            updateStatusMessage('Procesando imagen..', 'processing');
+            resultadoImagen.style.display = 'none';
+            noImageMessage.style.display = 'block';
+
+// === INICIA CÓDIGO DE RECORTE (simula 'object-fit: cover') ===
+
+        const videoWidth = video.videoWidth;
+        const videoHeight = video.videoHeight;
+        // Usamos clientWidth/clientHeight para obtener el tamaño REAL del recuadro
+        const previewWidth = video.clientWidth; 
+        const previewHeight = video.clientHeight;
+
+        const videoRatio = videoWidth / videoHeight;
+        const previewRatio = previewWidth / previewHeight;
+
+        let sx = 0, sy = 0, sWidth = videoWidth, sHeight = videoHeight;
+
+        // Comparamos los aspect ratios para decidir cómo recortar
+        if (videoRatio > previewRatio) {
+            // Video es más ancho que el recuadro (ej. 16:9 en un recuadro 1:1)
+            // Se recortan los lados (se calcula un nuevo ancho de fuente)
+            sWidth = videoHeight * previewRatio;
+            sHeight = videoHeight;
+            sx = (videoWidth - sWidth) / 2; // Centra el recorte
+            sy = 0;
+        } else {
+            // Video es más alto que el recuadro (ej. 9:16 en un recuadro 1:1)
+            // Se recortan arriba y abajo (se calcula un nuevo alto de fuente)
+            sWidth = videoWidth;
+            sHeight = videoWidth / previewRatio;
+            sx = 0;
+            sy = (videoHeight - sHeight) / 2; // Centra el recorte
+        }
+
+        // Ajustamos el canvas para que tenga la misma resolución que el recorte
+        // Esto mantiene la alta calidad, pero ya recortado.
+        canvas.width = sWidth;
+        canvas.height = sHeight;
+
+        // Dibujamos en el canvas SOLO la porción calculada (el recorte)
+        // drawImage(imagen, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height)
+        context.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+
+        // === TERMINA CÓDIGO DE RECORTE ===
+
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('file', blob, 'snapshot.jpg');
+
+                try {
+                    const response = await fetch('/api/procesar-imagen/', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`Error: ${errorData.detail || response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    // Animate counters
+                    animateCounterTo(countPlantulas, data.plantula_count);
+                    animateCounterTo(countCeldas, data.celda_vacia_count);
+                    animateCounterTo(countTotal, data.total_cavidades);
+                    animateCounterTo(percentageValue, data.porcentaje_germinacion);
+
+                    // Update progress
+                    progressBar.style.width = data.porcentaje_germinacion + '%';
+
+                    // Status message
+                    let status = '';
+                    if (data.porcentaje_germinacion >= 85) status = 'Excelente tasa de germinación';
+                    else if (data.porcentaje_germinacion >= 70) status = 'Buena tasa de germinación';
+                    else if (data.porcentaje_germinacion >= 50) status = 'Tasa de germinación normal';
+                    else status = 'Baja tasa de germinación';
+                    percentageStatus.textContent = status;
+
+                    // Show image
+                    resultadoImagen.src = data.output_image_url;
+                    resultadoImagen.style.display = 'block';
+                    noImageMessage.style.display = 'none';
+
+                    updateStatusMessage('Análisis completado exitosamente.', 'success');
+
+                } catch (err) {
+                    console.error("Error: ", err);
+                    updateStatusMessage(`Error: ${err.message}`, 'error');
+                } finally {
+                    snapButton.disabled = false;
+                }
+            }, 'image/jpeg', 0.9);
+        });
+
+        // === Animate Numbers ===
+        function animateCounterTo(element, target) {
+            const start = parseInt(element.textContent) || 0;
+            const duration = 800;
+            const startTime = Date.now();
+
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOutQuad = 1 - Math.pow(1 - progress, 2);
+                const current = Math.floor(start + (target - start) * easeOutQuad);
+                element.textContent = current;
+                if (progress < 1) requestAnimationFrame(update);
+                else element.textContent = target;
+            }
+
+            update();
+        }
+
+        // Initialize
+        startCamera();
+    </script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        // === Mobile Menu Toggle ===
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        if (mobileMenuToggle && navMenu) {
+            mobileMenuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+                mobileMenuToggle.classList.toggle('active');
+                console.log('Menu toggled:', navMenu.classList.contains('active'));
+            });
+
+            // Close menu when clicking on links
+            const navLinks = navMenu.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.navbar')) {
+                    navMenu.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                }
+            });
+        } else {
+            console.error('Mobile menu elements not found');
+        }
+    </script>
+
+</body>
+</html>
